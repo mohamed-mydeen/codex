@@ -1,0 +1,1 @@
+export default function EmptyState({ title, text, action, onAction }) { return <section className="empty"><div className="emptyIcon">📚</div><h2>{title}</h2><p>{text}</p>{action && <button className="primary" onClick={onAction}>{action}</button>}</section>; }

@@ -1,0 +1,15 @@
+const KEY = 'attendance-tracker-data-v1';
+export const defaultData = { subjects: [], attendanceRecords: [], timetable: [], settings: { minimumAttendance: 75, theme: 'system' } };
+const safe = () => { try { const raw = localStorage.getItem(KEY); if (!raw) return structuredClone(defaultData); const parsed = JSON.parse(raw); return { ...structuredClone(defaultData), ...parsed, settings: { ...defaultData.settings, ...(parsed.settings || {}) }, subjects: Array.isArray(parsed.subjects) ? parsed.subjects : [], attendanceRecords: Array.isArray(parsed.attendanceRecords) ? parsed.attendanceRecords : [], timetable: Array.isArray(parsed.timetable) ? parsed.timetable : [] }; } catch { localStorage.setItem(KEY, JSON.stringify(defaultData)); return structuredClone(defaultData); } };
+export const getAppData = safe;
+export const saveAppData = data => localStorage.setItem(KEY, JSON.stringify({ ...structuredClone(defaultData), ...data }));
+export const getSubjects = () => safe().subjects;
+export const saveSubjects = subjects => saveAppData({ ...safe(), subjects });
+export const getAttendanceRecords = () => safe().attendanceRecords;
+export const saveAttendanceRecords = attendanceRecords => saveAppData({ ...safe(), attendanceRecords });
+export const getTimetable = () => safe().timetable;
+export const saveTimetable = timetable => saveAppData({ ...safe(), timetable });
+export const getSettings = () => safe().settings;
+export const saveSettings = settings => saveAppData({ ...safe(), settings: { ...safe().settings, ...settings } });
+export const clearAllData = () => saveAppData(structuredClone(defaultData));
+export const validateBackup = data => data && Array.isArray(data.subjects) && Array.isArray(data.attendanceRecords) && Array.isArray(data.timetable) && typeof data.settings === 'object';

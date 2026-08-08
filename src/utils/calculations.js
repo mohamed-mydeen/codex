@@ -1,0 +1,3 @@
+export const percentage = (attended, total) => total > 0 ? (attended / total) * 100 : null;
+export const classesNeeded = (attended, total, target) => { const t = target / 100; if (t <= 0) return 0; if (t >= 1) return attended >= total && total > 0 ? 0 : Infinity; if (percentage(attended, total) >= target) return 0; return Math.max(0, Math.ceil((t * total - attended) / (1 - t))); };
+export const canMiss = (attended, total, target) => { const t = target / 100; if (t <= 0) return Infinity; if (total <= 0 || percentage(attended, total) < target) return 0; return Math.max(0, Math.floor(attended / t - total)); };
